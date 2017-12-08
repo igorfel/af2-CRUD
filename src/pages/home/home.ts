@@ -1,9 +1,6 @@
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ActionSheetController } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { database } from 'firebase/app';
-import { Title } from '@angular/platform-browser/src/browser/title';
+import { SongsProvider } from '../../providers/songs/songs';
 
 @Component({
   selector: 'page-home',
@@ -11,12 +8,9 @@ import { Title } from '@angular/platform-browser/src/browser/title';
 })
 export class HomePage {
 
-  songsList: AngularFireList<any>;
-  songs: Observable<any[]>
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, public afDatabase: AngularFireDatabase) {
-    this.songsList = afDatabase.list('/songs');
-    this.songs = this.songsList.valueChanges();
+  constructor(public songsProvider : SongsProvider, public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
+
   }
 
   addSong(){
@@ -39,12 +33,7 @@ export class HomePage {
         {
           text: 'Save',
           handler: data => {
-            const newSongRef = this.songsList.push({})
-
-            newSongRef.set({
-              id: newSongRef.key,
-              title: data.title
-            })
+            this.songsProvider.add(data);
           }
         }
       ]
@@ -61,7 +50,7 @@ export class HomePage {
           text: 'Delete Song',
           role: 'destructive',
           handler: () => {
-            this.removeSong(songId);
+            this.songsProvider.remove(songId);
           }
         },{
           text: 'Update Title',
@@ -79,10 +68,6 @@ export class HomePage {
     });
 
     actionSheet.present();
-  }
-
-  removeSong(songId: string){
-    this.songsList.remove();
   }
 
   updateSong(songId: string, songTitle: string){
@@ -105,9 +90,7 @@ export class HomePage {
         },{
           text: 'Save',
           handler: data => {
-            this.songsList.update(songId, {
-              title: data.title
-            });
+            this.songsProvider.update(songId, data);
           }
         }
       ]

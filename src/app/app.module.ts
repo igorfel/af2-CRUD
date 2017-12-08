@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { SongsProvider } from '../providers/songs/songs';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBHUJ5tr8h6K0XfDaZcpWHMvEKYSrXfGc0",
@@ -38,7 +39,8 @@ export const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    SongsProvider
   ]
 })
 export class AppModule {}
