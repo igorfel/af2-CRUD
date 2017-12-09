@@ -1,15 +1,16 @@
+import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, ActionSheetController } from 'ionic-angular';
 import { SongsProvider } from '../../providers/songs/songs';
 
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
-
-  constructor(public songsProvider : SongsProvider, public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
+  constructor(public songsProvider : SongsProvider, public authProvider: AuthServiceProvider, public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
 
   }
 
@@ -97,5 +98,9 @@ export class HomePage {
     });
 
     prompt.present();
+  }
+
+  logout(){
+    this.authProvider.logout(this.navCtrl);
   }
 }
